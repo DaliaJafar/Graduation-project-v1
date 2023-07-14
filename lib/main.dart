@@ -11,6 +11,7 @@ import 'package:firebase_login_app/Screens/usertype_screen.dart';
 import 'package:firebase_login_app/firebase_options.dart';
 import 'package:firebase_login_app/test.dart';
 import 'package:flutter/material.dart';
+import 'Screens/edit_screen.dart';
 import 'Screens/home_screen_test.dart';
 import 'Screens/map_screen.dart';
 import 'Screens/navigation_screen.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: UserProfilePage1(),
+      home: EditProfileUI(),
     );
   }
 }

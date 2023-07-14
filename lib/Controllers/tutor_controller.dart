@@ -100,7 +100,7 @@ class TutorController {
         firestore.collection('users');
     DocumentReference<Object?> documentRef = collectionRef.doc(tutorId);
 
-    await documentRef.update({'exeprience': exeprience});
+    await documentRef.update({'experience': exeprience});
   }
 
   // Future<Tutor> getTutorDetails(String email) async {
