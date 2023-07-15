@@ -8,17 +8,27 @@ Stream<QuerySnapshot> getAllSessions() {
   return FirebaseFirestore.instance.collection('study_session').snapshots();
 }
 
-Stream<QuerySnapshot> getPendingSessions() {
+Stream<QuerySnapshot> getPendingSessions(String studentId) {
   return FirebaseFirestore.instance
       .collection('study_session')
       .where('status', isEqualTo: 'pending')
+      .where('student_id', isEqualTo: studentId)
       .snapshots();
 }
 
-Stream<QuerySnapshot> getUpcomingSessions() {
+Stream<QuerySnapshot> getPendingSessionsTutor(String tutorId) {
+  return FirebaseFirestore.instance
+      .collection('study_session')
+      .where('status', isEqualTo: 'pending')
+      .where('tutor_id', isEqualTo: tutorId)
+      .snapshots();
+}
+
+Stream<QuerySnapshot> getUpcomingSessions(String studentId) {
   return FirebaseFirestore.instance
       .collection('study_session')
       .where('status', isEqualTo: 'upcoming')
+      .where('student_id', isEqualTo: studentId)
       .snapshots();
 }
 
@@ -70,17 +80,18 @@ Future<String> getStudentName111(String studentId) async {
   return studentName;
 }
 
-void addSession(String day, String location, String period, DateTime time) {
+void addSession(DateTime day, String location, String period, DateTime time,
+    String tutorId, String studentId, String subject) {
   FireBaseController().firebaseFirestore.collection('study_session').doc().set({
     "date": day,
     "location": location,
-    "period": "",
-    "session_id": "",
+    "period": period,
+    "session_id": "66",
     "status": "pending",
-    "student_id": "123",
-    "subject": "math",
+    "student_id": studentId,
+    "subject": subject,
     "time": time,
-    "tutor_id": "915",
+    "tutor_id": tutorId,
   });
 }
 
@@ -134,11 +145,11 @@ void deleteSessionBySessionId(String sessionId) async {
 }
 
 Future<List<DateTime>> getDatesOfSessions() async {
-  final QuerySnapshot<Map<String, dynamic>> snapshot =
-      await FirebaseFirestore.instance
-          .collection('study_session')
-          .where('status', isEqualTo: 'upcoming')
-          .get();
+  final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+      .instance
+      .collection('study_session')
+      .where('status', isEqualTo: 'upcoming')
+      .get();
 
   final List<DateTime> upcomingDates = [];
 

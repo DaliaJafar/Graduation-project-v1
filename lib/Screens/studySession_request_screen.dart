@@ -3,6 +3,7 @@ import 'package:firebase_login_app/Controllers/sessions_controller.dart';
 import 'package:firebase_login_app/Models/session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
+import 'package:intl/intl.dart';
 
 class StudySessionRequestScreen extends StatefulWidget {
   final StudySession studySession;
@@ -17,6 +18,9 @@ class StudySessionRequestScreen extends StatefulWidget {
 class _StudySessionRequestScreenState extends State<StudySessionRequestScreen> {
   @override
   Widget build(BuildContext context) {
+    final dateFormat = DateFormat('yyyy-MM-dd');
+    final formattedDate = dateFormat.format(widget.studySession.date.toDate());
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 228, 243),
       appBar: AppBar(
@@ -41,7 +45,7 @@ class _StudySessionRequestScreenState extends State<StudySessionRequestScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    nameText(
+                    nameContainer(
                       context,
                       widget.studySession.studentId.toString(),
                     )
@@ -81,17 +85,17 @@ class _StudySessionRequestScreenState extends State<StudySessionRequestScreen> {
                 Row(
                   children: [
                     const Icon(Icons.date_range_outlined),
-                    const SizedBox(width: 15),
-                    Text(widget.studySession.date.toString(),
+                    const SizedBox(width: 20),
+                    Text(formattedDate.toString(),
                         style: TextStyle(
                             color: Colors.black.withOpacity(0.8),
-                            fontSize: 18)),
+                            fontSize: 20)),
                   ],
                 ),
                 Row(
                   children: [
                     const Icon(Icons.access_time_outlined),
-                    timePicker(DateTime(2017, 9, 7, 17, 30)),
+                    timePicker(widget.studySession.time!.toDate()),
                   ],
                 ),
                 Row(
@@ -101,7 +105,7 @@ class _StudySessionRequestScreenState extends State<StudySessionRequestScreen> {
                     Text(widget.studySession.location.toString(),
                         style: TextStyle(
                             color: Colors.black.withOpacity(0.8),
-                            fontSize: 18)),
+                            fontSize: 20)),
                   ],
                 ),
               ],
@@ -120,7 +124,8 @@ class _StudySessionRequestScreenState extends State<StudySessionRequestScreen> {
                     onPressed: () {
                       confirm_dialog_reject(widget.studySession);
                     },
-                    child: const Text('Reject')),
+                    child:
+                        const Text('Reject', style: TextStyle(fontSize: 20))),
                 const Icon(
                   Icons.close,
                   color: Colors.red,
@@ -136,7 +141,8 @@ class _StudySessionRequestScreenState extends State<StudySessionRequestScreen> {
                     onPressed: () {
                       confirm_dialog(widget.studySession);
                     },
-                    child: const Text('Approve')),
+                    child:
+                        const Text('Approve', style: TextStyle(fontSize: 20))),
                 const Icon(
                   Icons.check,
                   color: Colors.green,
@@ -150,11 +156,11 @@ class _StudySessionRequestScreenState extends State<StudySessionRequestScreen> {
     );
   }
 
-  Widget nameText(BuildContext context, String uid) {
+  Widget nameContainer(BuildContext context, String uid) {
     return Row(children: [
       Container(
-        width: 25,
-        height: 25,
+        width: 30,
+        height: 30,
         margin: const EdgeInsets.only(right: 10),
         decoration: const BoxDecoration(
           color: Color.fromARGB(255, 156, 147, 147),
@@ -179,16 +185,10 @@ class _StudySessionRequestScreenState extends State<StudySessionRequestScreen> {
               child: Text('Error occurred: ${snapshot.error}'),
             );
           }
-
-          // if (!snapshot.hasData || !snapshot.data!.exists) {
-          //   return Center(
-          //     child: Text('User data not found.'),
-          //   );
-          // }
-
-          // User data exists
           String userData = snapshot.data!;
-          return Text(userData);
+          return Text(userData,
+              style: TextStyle(
+                  color: Colors.black.withOpacity(0.8), fontSize: 18));
         },
       ),
     ]);

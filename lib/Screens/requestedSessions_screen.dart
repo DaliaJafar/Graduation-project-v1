@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_login_app/Models/session.dart';
 import 'package:firebase_login_app/Screens/studySession_request_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,17 +18,18 @@ class RequestedSessionsScreen extends StatefulWidget {
 class _RequestedSessionsState extends State<RequestedSessionsScreen> {
   // final _selectedColor = Color.fromRGBO(156, 39, 176, 1);
   // final _unselectedColor = Color(0xff5f6368);
-
+  String userId = FirebaseAuth.instance.currentUser!.uid;
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             title: Text("Flutter TabBar Example - Customized "),
           ),
           body: Container(
-            child: upcomingSessions(getPendingSessions()),
+            child: upcomingSessions(getPendingSessionsTutor(userId)),
           )),
     );
   }
@@ -46,7 +48,7 @@ class _RequestedSessionsState extends State<RequestedSessionsScreen> {
             itemCount: documents.length,
             itemBuilder: (context, index) {
               final document = documents[index];
-              
+
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
@@ -90,7 +92,7 @@ class _RequestedSessionsState extends State<RequestedSessionsScreen> {
                             padding: const EdgeInsets.all(3.0),
                             child: Text(document['subject'] +
                                 "\n\n" +
-                                document['date']),
+                                document['date'].toString()),
                           ),
                           trailing: IconButton(
                             icon: const Icon(
@@ -138,7 +140,7 @@ class _RequestedSessionsState extends State<RequestedSessionsScreen> {
 
   StudySession intializeStudySessionModel(QueryDocumentSnapshot document) {
     StudySession studySession = StudySession(
-        date: document['date'] ?? '',
+        date: document['date'] ?? Timestamp.now(),
         location: document['location'] ?? '',
         period: document['period'] ?? '',
         sessionId: document['session_id'] ?? '',

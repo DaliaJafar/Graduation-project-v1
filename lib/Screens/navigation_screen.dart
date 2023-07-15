@@ -7,6 +7,7 @@ import 'package:firebase_login_app/Screens/search_screen.dart';
 import 'package:firebase_login_app/Screens/signup_screen.dart';
 import 'package:firebase_login_app/Screens/student_edit_profile.dart';
 import 'package:firebase_login_app/Screens/student_profile.dart';
+import 'package:firebase_login_app/Screens/upcomingSessions_screen%20copy.dart';
 import 'package:firebase_login_app/Screens/usertype_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -22,10 +23,12 @@ class _NavigationScreenState extends State<NavigationScreen>
   static const List<Destination> allDestinations = <Destination>[
     Destination(0, 'Home', Icons.home, Colors.purple, HomeScreen()),
     Destination(1, 'Calendar', Icons.calendar_month_outlined, Colors.purple,
-        HomeScreen()),
-    Destination(2, 'Map', Icons.map_outlined, Colors.purple, SearchByMapScreen()),
+        UpcomingSessionsScreenCopy()),
+    Destination(
+        2, 'Map', Icons.map_outlined, Colors.purple, SearchByMapScreen()),
     Destination(3, 'Search', Icons.search, Colors.purple, SearchScreen()),
-    Destination(4, 'Profile', Icons.person, Colors.purple, StudentEditProfileUI()),
+    Destination(
+        4, 'Profile', Icons.person, Colors.purple, StudentEditProfileUI()),
   ];
 
   late final List<GlobalKey<NavigatorState>> navigatorKeys;

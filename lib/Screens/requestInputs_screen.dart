@@ -1,17 +1,23 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_login_app/Components/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:firebase_login_app/Controllers/sessions_controller.dart';
 
+import '../Models/tutor.dart';
+
 class RequestInputsScreen extends StatefulWidget {
+  Tutor tutorObject;
   DateTime date;
-  RequestInputsScreen({required this.date, Key? key}) : super(key: key);
+  RequestInputsScreen({required this.date, Key? key, required this.tutorObject})
+      : super(key: key);
 
   @override
   _RequestInputsState createState() => _RequestInputsState();
 }
 
 class _RequestInputsState extends State<RequestInputsScreen> {
+  final userId = FirebaseAuth.instance.currentUser!.uid;
   static const List<String> hours = <String>[
     '1 hour',
     '2 hours',
@@ -158,10 +164,14 @@ class _RequestInputsState extends State<RequestInputsScreen> {
                       MaterialStatePropertyAll<Color>(Colors.purple)),
               onPressed: () {
                 setState(() {
-                  print('adding');
-                  addSession(widget.date.toString(), location_controller.text,
-                      period, _dateTime);
-                  print('added');
+                  addSession(
+                      widget.date,
+                      location_controller.text,
+                      period,
+                      _dateTime,
+                      widget.tutorObject.id,
+                      userId,
+                      widget.tutorObject.subject);
                 });
                 Navigator.of(context).pop();
 

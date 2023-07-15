@@ -25,41 +25,39 @@ class _CalenderState extends State<CalenderScreen> {
   Future<List<DateTime>> list = getDatesOfSessions();
   List<DateTime> upcomingDates = [];
   List<Event> eventsOfTheDay = [];
-  TextEditingController location_controller = TextEditingController();
   DateTime _dateTime = DateTime.now();
-  DateTime _currentDate = DateTime(2023, 2, 3);
-  DateTime _currentDate2 = DateTime(2023, 2, 3);
+  DateTime _currentDate = DateTime(2023, 4, 3);
   String _currentMonth = DateFormat.yMMM().format(DateTime(2023, 2, 3));
   DateTime _targetDateTime = DateTime(2018, 9, 20);
-//  List<DateTime> _markedDate = [DateTime(2018, 9, 20), DateTime(2018, 10, 11)];
+  // List<DateTime> _markedDate = [DateTime(2018, 9, 20), DateTime(2018, 10, 11)];
   static final Widget _eventIcon = Container(
     decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(1000)),
-        border: Border.all(color: Colors.blue, width: 2.0)),
+        border: Border.all(color: Colors.blue, width: 4.0)),
   );
 
   final EventList<Event> _markedDateMap = EventList<Event>(
     events: {
-      DateTime(2023, 2, 10): [
+      DateTime(2022, 2, 10): [
         Event(
-          date: DateTime(2019, 2, 2),
+          date: DateTime(2022, 2, 10),
           title: 'Event 1',
           icon: _eventIcon,
           dot: Container(
             margin: EdgeInsets.symmetric(horizontal: 1.0),
             color: Color.fromARGB(255, 111, 244, 54),
-            height: 5.0,
-            width: 5.0,
+            height: 1.0,
+            width: 1.0,
           ),
         ),
         Event(
-          date: DateTime(2023, 2, 10),
+          date: DateTime(2022, 2, 10),
           title: 'Event 2',
           icon: _eventIcon,
         ),
         Event(
-          date: DateTime(2023, 3, 10),
+          date: DateTime(2022, 3, 10),
           title: 'Event 3',
           icon: _eventIcon,
         ),
@@ -68,26 +66,6 @@ class _CalenderState extends State<CalenderScreen> {
   );
 
   // late EventList<Event> _markedDateMap = EventList<Event>(events: {});
-
-  void getMarkedDates(List<DateTime> upcomingDates) async {
-    print('before');
-    for (DateTime date in upcomingDates) {
-      print('in for');
-      _markedDateMap.add(
-          date,
-          Event(
-            date: date,
-            title: 'Event',
-            icon: _eventIcon,
-            dot: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 1.0),
-              color: const Color.fromARGB(255, 111, 244, 54),
-              height: 5.0,
-              width: 5.0,
-            ),
-          ));
-    }
-  }
 
   EventList<Event> _markedDateMap1 = EventList<Event>(events: {});
   void addEvents() {
@@ -109,20 +87,13 @@ class _CalenderState extends State<CalenderScreen> {
 
   @override
   void initState() {
-    print(widget.tutorObject.phone +
-        " , name: " +
-        widget.tutorObject.name +
-        " " +
-        widget.tutorObject.id +
-        " " +
-        FirebaseAuth.instance.currentUser!.uid);
-    _markedDateMap.add(
-        new DateTime(2023, 2, 25),
-        new Event(
-          date: new DateTime(2019, 2, 25),
-          title: 'Event 5',
-          icon: _eventIcon,
-        ));
+    // print(widget.tutorObject.phone +
+    //     " , name: " +
+    //     widget.tutorObject.name +
+    //     " " +
+    //     widget.tutorObject.id +
+    //     " " +
+    //     FirebaseAuth.instance.currentUser!.uid);
 
     getDates();
     // getMarkedDates(upcomingDates);
@@ -262,6 +233,7 @@ class _CalenderState extends State<CalenderScreen> {
                         MaterialPageRoute(
                             builder: (context) => RequestInputsScreen(
                                   date: _targetDateTime,
+                                  tutorObject: widget.tutorObject,
                                 )));
                   },
                   elevation: 0,
@@ -292,7 +264,7 @@ class _CalenderState extends State<CalenderScreen> {
         });
         print('day pressed !');
         setState(() {
-          _currentDate2 = date;
+          _currentDate = date;
           // _showSessionsDialog(date);
         });
         events.forEach((event) => print(event.title));
@@ -307,7 +279,7 @@ class _CalenderState extends State<CalenderScreen> {
 //      firstDayOfWeek: 4,
       markedDatesMap: _markedDateMap,
       height: 520.0,
-      selectedDateTime: _currentDate2,
+      selectedDateTime: _currentDate,
       targetDateTime: _targetDateTime,
       customGridViewPhysics: NeverScrollableScrollPhysics(),
       markedDateCustomShapeBorder:
@@ -320,11 +292,11 @@ class _CalenderState extends State<CalenderScreen> {
       todayTextStyle: const TextStyle(
         color: Color.fromARGB(255, 8, 8, 8),
       ),
-      markedDateShowIcon: true,
-      markedDateIconMaxShown: 2,
-      markedDateIconBuilder: (event) {
-        return event.icon;
-      },
+      //markedDateShowIcon: true,
+      // markedDateIconMaxShown: 2,
+      // markedDateIconBuilder: (event) {
+      //   return event.icon;
+      // },
       markedDateMoreShowTotal: true,
       todayButtonColor: Colors.yellow,
       selectedDayTextStyle: const TextStyle(

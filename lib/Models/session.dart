@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class StudySession {
-  final String date;
+  final Timestamp date;
   final String? location;
   final String? period;
   final String? sessionId;
   final String? status;
   final String? studentId;
   final String? subject;
-  final String? time;
+  final Timestamp? time;
   final String? tutorId;
 
   StudySession(

@@ -3,6 +3,7 @@ import 'package:firebase_login_app/Screens/home_screen.dart';
 import 'package:firebase_login_app/Screens/login_screen.dart';
 import 'package:firebase_login_app/Screens/map_screen.dart';
 import 'package:firebase_login_app/Screens/profile.dart';
+import 'package:firebase_login_app/Screens/requestedSessions_screen.dart';
 import 'package:firebase_login_app/Screens/search_screen.dart';
 import 'package:firebase_login_app/Screens/signup_screen.dart';
 import 'package:firebase_login_app/Screens/tutor_home_screen.dart';
@@ -21,7 +22,7 @@ class _NavigationScreenState extends State<NavigationTutorScreen>
   static const List<Destination> allDestinations = <Destination>[
     Destination(0, 'Home', Icons.home, Colors.purple, TutorHomeScreen()),
     Destination(1, 'Calendar', Icons.calendar_month_outlined, Colors.purple,
-        HomeScreen()),
+        RequestedSessionsScreen()),
     Destination(2, 'Profile', Icons.person, Colors.purple, UserProfilePage1()),
   ];
 

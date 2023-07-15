@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_login_app/Models/session.dart';
 import 'package:firebase_login_app/Screens/login_screen.dart';
 import 'package:firebase_login_app/Screens/signup_screen.dart';
@@ -18,6 +19,7 @@ class UpcomingSessionsScreenCopy extends StatefulWidget {
 class _UserTypeScreenState extends State<UpcomingSessionsScreenCopy> {
   // final _selectedColor = Color.fromRGBO(156, 39, 176, 1);
   // final _unselectedColor = Color(0xff5f6368);
+  final userId = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +57,8 @@ class _UserTypeScreenState extends State<UpcomingSessionsScreenCopy> {
                 Expanded(
                     child: TabBarView(
                   children: [
-                    upcomingSessions(getUpcomingSessions()),
-                    upcomingSessions(getPendingSessions())
+                    upcomingSessions(getUpcomingSessions(userId)),
+                    upcomingSessions(getPendingSessions(userId))
                   ],
                 ))
               ],
@@ -121,7 +123,7 @@ class _UserTypeScreenState extends State<UpcomingSessionsScreenCopy> {
                             padding: const EdgeInsets.all(3.0),
                             child: Text(document['subject'] +
                                 "\n\n" +
-                                document['date']),
+                                document['date'].toString()),
                           ),
                           trailing: Padding(
                             padding: const EdgeInsets.all(3.0),
