@@ -39,10 +39,6 @@ class _TutorsListState extends State<TutorsList> {
     // print(widget.items);
   }
 
-  Future<double> getRate(String id) {
-    return avgRates(id);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +53,6 @@ class _TutorsListState extends State<TutorsList> {
             itemCount: widget.items.length,
             itemBuilder: (context, index) {
               final tutor = widget.items[index];
-              rate = getRate(tutor['tutor_id']);
               tempItems2.add(widget.items[index]);
               return Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -194,60 +189,60 @@ class _TutorsListState extends State<TutorsList> {
               });
             },
           ),
-          const ListTile(
-            leading: Icon(Icons.location_city),
-            title: Text("City Name"),
-          ),
-          Center(
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-              StreamBuilder<QuerySnapshot>(
-                stream: FireBaseController()
-                    .firebaseFirestore
-                    .collection('cities')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  List<DropdownMenuItem> citiesItems = [];
-                  if (!snapshot.hasData) {
-                    const CircularProgressIndicator();
-                  } else {
-                    final cities = snapshot.data?.docs.reversed.toList();
-                    citiesItems.add(
-                      const DropdownMenuItem(
-                          value: "0", child: Text("Select City")),
-                    );
+          // const ListTile(
+          //   leading: Icon(Icons.location_city),
+          //   title: Text("City Name"),
+          // ),
+          // Center(
+          //   child:
+          //       Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+          //     StreamBuilder<QuerySnapshot>(
+          //       stream: FireBaseController()
+          //           .firebaseFirestore
+          //           .collection('cities')
+          //           .snapshots(),
+          //       builder: (context, snapshot) {
+          //         List<DropdownMenuItem> citiesItems = [];
+          //         if (!snapshot.hasData) {
+          //           const CircularProgressIndicator();
+          //         } else {
+          //           final cities = snapshot.data?.docs.reversed.toList();
+          //           citiesItems.add(
+          //             const DropdownMenuItem(
+          //                 value: "0", child: Text("Select City")),
+          //           );
 
-                    for (var city in cities!) {
-                      citiesItems.add(
-                        DropdownMenuItem(
-                            value: city.id, child: Text(city['city_name'])),
-                      );
-                    }
-                  }
-                  return DropdownButton(
-                    items: citiesItems,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedCity = value;
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text(value),
-                              content: Text("ERROR PASS"),
-                            );
-                          },
-                        );
-                      });
-                      print(selectedCity);
-                    },
-                    value: selectedCity,
-                    isExpanded: false,
-                  );
-                },
-              ),
-            ]),
-          ),
+          //           for (var city in cities!) {
+          //             citiesItems.add(
+          //               DropdownMenuItem(
+          //                   value: city.id, child: Text(city['city_name'])),
+          //             );
+          //           }
+          //         }
+          //         return DropdownButton(
+          //           items: citiesItems,
+          //           onChanged: (value) {
+          //             setState(() {
+          //               selectedCity = value;
+          //               showDialog(
+          //                 context: context,
+          //                 builder: (context) {
+          //                   return AlertDialog(
+          //                     title: Text(value),
+          //                     content: Text("ERROR PASS"),
+          //                   );
+          //                 },
+          //               );
+          //             });
+          //             print(selectedCity);
+          //           },
+          //           value: selectedCity,
+          //           isExpanded: false,
+          //         );
+          //       },
+          //     ),
+          //   ]),
+          // ),
           FloatingActionButton.extended(
             onPressed: () {
               print(widget.items.length);
