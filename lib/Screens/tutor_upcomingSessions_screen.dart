@@ -10,16 +10,14 @@ import '../utils/colors_utils.dart';
 import 'package:flutter_advanced_segment/flutter_advanced_segment.dart';
 import 'package:intl/intl.dart';
 
-class UpcomingSessionsScreenCopy extends StatefulWidget {
-  const UpcomingSessionsScreenCopy({Key? key}) : super(key: key);
+class TutorUpcomingSessionsScreen extends StatefulWidget {
+  const TutorUpcomingSessionsScreen({Key? key}) : super(key: key);
 
   @override
   _UserTypeScreenState createState() => _UserTypeScreenState();
 }
 
-class _UserTypeScreenState extends State<UpcomingSessionsScreenCopy> {
-  // final _selectedColor = Color.fromRGBO(156, 39, 176, 1);
-  // final _unselectedColor = Color(0xff5f6368);
+class _UserTypeScreenState extends State<TutorUpcomingSessionsScreen> {
   final userId = FirebaseAuth.instance.currentUser!.uid;
 
   @override
@@ -28,7 +26,7 @@ class _UserTypeScreenState extends State<UpcomingSessionsScreenCopy> {
       length: 2,
       child: Scaffold(
           appBar: AppBar(
-            title: Text("Flutter TabBar Example - Customized "),
+            title: Text("Sessions"),
           ),
           body: Padding(
             padding: EdgeInsets.all(8.0),
@@ -58,8 +56,8 @@ class _UserTypeScreenState extends State<UpcomingSessionsScreenCopy> {
                 Expanded(
                     child: TabBarView(
                   children: [
-                    sessionsList(getUpcomingSessions(userId)),
-                    sessionsList(getPendingSessions(userId))
+                    sessionsList(getUpcomingSessionsTutor(userId)),
+                    sessionsList(getPendingSessionsTutor(userId))
                   ],
                 ))
               ],
@@ -82,6 +80,7 @@ class _UserTypeScreenState extends State<UpcomingSessionsScreenCopy> {
             itemCount: documents.length,
             itemBuilder: (context, index) {
               final document = documents[index];
+
               final Timestamp timestamp = document['date']!;
               final dateFormat = DateFormat('yyyy-MM-dd');
               final formattedDate = dateFormat.format(timestamp.toDate());
@@ -99,12 +98,6 @@ class _UserTypeScreenState extends State<UpcomingSessionsScreenCopy> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: ListTile(
-                          leading: const CircleAvatar(
-                            radius:
-                                35, // Adjust the radius as per your preference
-                            backgroundImage: NetworkImage(
-                                'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?cs=srgb&dl=pexels-pixabay-220453.jpg&fm=jpg'), // Replace with your image URL or use AssetImage for local images
-                          ),
                           title: Padding(
                             padding: const EdgeInsets.all(3.0),
                             child: FutureBuilder<String>(

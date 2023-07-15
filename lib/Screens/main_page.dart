@@ -4,7 +4,7 @@ import 'package:firebase_login_app/Controllers/users_controller.dart';
 import 'package:firebase_login_app/Models/tutor.dart';
 import 'package:firebase_login_app/Screens/home_screen.dart';
 import 'package:firebase_login_app/Screens/login_screen.dart';
-import 'package:firebase_login_app/Screens/nav_tutor_screen.dart';
+import 'package:firebase_login_app/Screens/tutor_navigation_screen.dart';
 import 'package:firebase_login_app/Screens/usertype_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';

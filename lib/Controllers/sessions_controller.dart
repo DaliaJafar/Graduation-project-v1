@@ -32,6 +32,14 @@ Stream<QuerySnapshot> getUpcomingSessions(String studentId) {
       .snapshots();
 }
 
+Stream<QuerySnapshot> getUpcomingSessionsTutor(String tutorId) {
+  return FirebaseFirestore.instance
+      .collection('study_session')
+      .where('status', isEqualTo: 'upcoming')
+      .where('tutor_id', isEqualTo: tutorId)
+      .snapshots();
+}
+
 Stream<QuerySnapshot> getUpcomingSessionsByDate(DateTime date) {
   print('getUpcomingSessionsByDate');
   print(date);
