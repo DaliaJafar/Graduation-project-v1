@@ -1,4 +1,6 @@
 // import 'dart:html';
+//import 'dart:js_util';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_login_app/Screens/edit_profile_old.dart';
 import 'package:firebase_login_app/Screens/login_screen.dart';
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: EditProfileUI(),
+      home: UserTypeScreen(),
     );
   }
 }

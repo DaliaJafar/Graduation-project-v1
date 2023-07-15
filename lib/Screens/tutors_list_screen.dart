@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_login_app/Controllers/reviews_controller.dart';
 import 'package:firebase_login_app/Models/tutor.dart';
 import 'package:firebase_login_app/Screens/profile_from_search_screen%20copy.dart';
 import 'package:firebase_login_app/Screens/profile_from_search_screen.dart';
@@ -30,11 +31,16 @@ class _TutorsListState extends State<TutorsList> {
 
   String selectedCity = "0";
   double value = 50;
+  late Future<double> rate;
   @override
   void initState() {
     super.initState();
 
     // print(widget.items);
+  }
+
+  Future<double> getRate(String id) {
+    return avgRates(id);
   }
 
   @override
@@ -51,6 +57,7 @@ class _TutorsListState extends State<TutorsList> {
             itemCount: widget.items.length,
             itemBuilder: (context, index) {
               final tutor = widget.items[index];
+              rate = getRate(tutor['tutor_id']);
               tempItems2.add(widget.items[index]);
               return Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -71,8 +78,24 @@ class _TutorsListState extends State<TutorsList> {
                     title: Text(tutor['name']),
                     subtitle:
                         Text("${tutor['hourly_rate']} \$\n${tutor['subject']}"),
-                    trailing: Column(
-                      children: [Icon(Icons.star_rate), Text("3.5")],
+                    trailing: FutureBuilder(
+                      future: avgRates(tutor['tutor_id']),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<double> snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator(); // Show a loading indicator while waiting
+                        }
+                        if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        }
+                        return Column(
+                          children: [
+                            Icon(Icons.star_rate),
+                            Text(snapshot.data.toString()),
+                          ],
+                        );
+                      },
                     ),
                     onTap: () {
                       Tutor tutorObject = Tutor(
@@ -229,7 +252,7 @@ class _TutorsListState extends State<TutorsList> {
             onPressed: () {
               print(widget.items.length);
               tempList = [];
-              
+
               for (int i = 0; i < widget.items.length; i++) {
                 if (double.parse(widget.items[i]['hourly_rate']) <= value) {
                   tempList.add(widget.items[i]);

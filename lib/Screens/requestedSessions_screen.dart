@@ -46,6 +46,7 @@ class _RequestedSessionsState extends State<RequestedSessionsScreen> {
             itemCount: documents.length,
             itemBuilder: (context, index) {
               final document = documents[index];
+              
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
@@ -89,7 +90,7 @@ class _RequestedSessionsState extends State<RequestedSessionsScreen> {
                             padding: const EdgeInsets.all(3.0),
                             child: Text(document['subject'] +
                                 "\n\n" +
-                                document['date'].toString()),
+                                document['date']),
                           ),
                           trailing: IconButton(
                             icon: const Icon(
@@ -101,7 +102,7 @@ class _RequestedSessionsState extends State<RequestedSessionsScreen> {
                               print('clicked');
                               StudySession studySession =
                                   intializeStudySessionModel(document);
-                              print(studySession);
+                              print(studySession.toString());
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

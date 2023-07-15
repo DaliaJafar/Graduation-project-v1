@@ -1,5 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_login_app/Models/tutor.dart';
 import 'package:firebase_login_app/Screens/requestInputs_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
@@ -12,13 +14,15 @@ import 'package:intl/intl.dart' show DateFormat;
 import 'package:firebase_login_app/Controllers/sessions_controller.dart';
 
 class CalenderScreen extends StatefulWidget {
-  const CalenderScreen({Key? key}) : super(key: key);
+  final Tutor tutorObject;
+  CalenderScreen({Key? key, required this.tutorObject}) : super(key: key);
 
   @override
   _CalenderState createState() => new _CalenderState();
 }
 
 class _CalenderState extends State<CalenderScreen> {
+  Future<List<DateTime>> list = getDatesOfSessions();
   List<DateTime> upcomingDates = [];
   List<Event> eventsOfTheDay = [];
   TextEditingController location_controller = TextEditingController();
@@ -26,7 +30,7 @@ class _CalenderState extends State<CalenderScreen> {
   DateTime _currentDate = DateTime(2023, 2, 3);
   DateTime _currentDate2 = DateTime(2023, 2, 3);
   String _currentMonth = DateFormat.yMMM().format(DateTime(2023, 2, 3));
-   DateTime _targetDateTime = DateTime(2018, 9, 20);
+  DateTime _targetDateTime = DateTime(2018, 9, 20);
 //  List<DateTime> _markedDate = [DateTime(2018, 9, 20), DateTime(2018, 10, 11)];
   static final Widget _eventIcon = Container(
     decoration: BoxDecoration(
@@ -35,11 +39,11 @@ class _CalenderState extends State<CalenderScreen> {
         border: Border.all(color: Colors.blue, width: 2.0)),
   );
 
-  EventList<Event> _markedDateMap = new EventList<Event>(
+  final EventList<Event> _markedDateMap = EventList<Event>(
     events: {
       DateTime(2023, 2, 10): [
-        new Event(
-          date: new DateTime(2019, 2, 2),
+        Event(
+          date: DateTime(2019, 2, 2),
           title: 'Event 1',
           icon: _eventIcon,
           dot: Container(
@@ -49,13 +53,13 @@ class _CalenderState extends State<CalenderScreen> {
             width: 5.0,
           ),
         ),
-        new Event(
-          date: new DateTime(2023, 2, 10),
+        Event(
+          date: DateTime(2023, 2, 10),
           title: 'Event 2',
           icon: _eventIcon,
         ),
-        new Event(
-          date: new DateTime(2023, 3, 10),
+        Event(
+          date: DateTime(2023, 3, 10),
           title: 'Event 3',
           icon: _eventIcon,
         ),
@@ -85,6 +89,18 @@ class _CalenderState extends State<CalenderScreen> {
     }
   }
 
+  EventList<Event> _markedDateMap1 = EventList<Event>(events: {});
+  void addEvents() {
+    list.then((dates) {
+      for (var date in dates) {
+        _markedDateMap1.add(
+          date,
+          Event(date: date, title: 'Event', icon: _eventIcon),
+        );
+      }
+    });
+  }
+
   void getDates() async {
     upcomingDates = await getDatesOfSessions();
     print('date!!');
@@ -93,6 +109,13 @@ class _CalenderState extends State<CalenderScreen> {
 
   @override
   void initState() {
+    print(widget.tutorObject.phone +
+        " , name: " +
+        widget.tutorObject.name +
+        " " +
+        widget.tutorObject.id +
+        " " +
+        FirebaseAuth.instance.currentUser!.uid);
     _markedDateMap.add(
         new DateTime(2023, 2, 25),
         new Event(
@@ -159,36 +182,77 @@ class _CalenderState extends State<CalenderScreen> {
                   child: calendar(),
                 ),
               ),
-              eventsOfTheDay.length == 0
-                  ? Container()
-                  : SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.5,
-                      child: ListView.builder(
-                        itemCount: eventsOfTheDay.length,
-                        itemBuilder: (context, index) {
-                          final event = eventsOfTheDay[index];
-                          return Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Color.fromARGB(255, 106, 102, 102),
+              // eventsOfTheDay.length == 0
+              //     ? Container()
+              // :
+              SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: getUpcomingSessionsByDate(_targetDateTime),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const CircularProgressIndicator();
+                      }
+                      final documents = snapshot.data!.docs;
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListView.builder(
+                          itemCount: documents.length,
+                          itemBuilder: (context, index) {
+                            final document = documents[index];
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.0),
                                 ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50)),
+                                color: Color.fromARGB(255, 197, 182, 197),
+                                elevation: 10,
+                                child: Column(
+                                  // mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: ListTile(
+                                        // leading: ,
+                                        title: Text(document['date']),
+                                        subtitle: Text(document['period']),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              child: ListTile(
-                                contentPadding: const EdgeInsets.all(5.0),
-                                leading: Text(''),
-                                title: Text(
-                                    '${event.date.day}/${event.date.month}/${event.date.year}'),
-                                subtitle: Text('eventsOfTheDay'),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  )
+                  //     ListView.builder(
+                  //   itemCount: eventsOfTheDay.length,
+                  //   itemBuilder: (context, index) {
+                  //     final event = eventsOfTheDay[index];
+                  //     return Padding(
+                  //       padding: const EdgeInsets.all(6.0),
+                  //       child: Container(
+                  //         decoration: BoxDecoration(
+                  //           border: Border.all(
+                  //             color: Color.fromARGB(255, 106, 102, 102),
+                  //           ),
+                  //           borderRadius: BorderRadius.all(Radius.circular(50)),
+                  //         ),
+                  //         child: ListTile(
+                  //           contentPadding: const EdgeInsets.all(5.0),
+                  //           leading: Text(''),
+                  //           title: Text(
+                  //               '${event.date.day}/${event.date.month}/${event.date.year}'),
+                  //           subtitle: Text('eventsOfTheDay'),
+                  //         ),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
+                  ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: FloatingActionButton.extended(
@@ -256,13 +320,12 @@ class _CalenderState extends State<CalenderScreen> {
       todayTextStyle: const TextStyle(
         color: Color.fromARGB(255, 8, 8, 8),
       ),
-      // markedDateShowIcon: true,
-      // markedDateIconMaxShown: 2,
-      // markedDateIconBuilder: (event) {
-      //   return event.icon;
-      // },
-      // markedDateMoreShowTotal:
-      //     true,
+      markedDateShowIcon: true,
+      markedDateIconMaxShown: 2,
+      markedDateIconBuilder: (event) {
+        return event.icon;
+      },
+      markedDateMoreShowTotal: true,
       todayButtonColor: Colors.yellow,
       selectedDayTextStyle: const TextStyle(
         color: Colors.yellow,

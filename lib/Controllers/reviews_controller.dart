@@ -57,5 +57,6 @@ Future<double> avgRates(String tutorId) async {
     }
   }
   avg = sum / snapshot.docs.length;
+
   return avg;
 }
