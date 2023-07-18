@@ -47,7 +47,7 @@ class _StudySessionDetailsScreenState extends State<StudySessionDetailsScreen> {
                   children: [
                     nameContainer(
                       context,
-                      widget.studySession.studentId.toString(),
+                      widget.studySession.tutorId.toString(),
                     )
                   ],
                 ),
