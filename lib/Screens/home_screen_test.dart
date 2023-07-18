@@ -1,7 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_login_app/Screens/usertype_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../Controllers/firebase_controller.dart';
+import '../Controllers/users_controller.dart';
 import '../utils/colors_utils.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+
+import 'tutors_list_screen.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -11,6 +18,13 @@ class MyHomePage extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Builder(builder: (context) {
       return Scaffold(
+          // appBar: AppBar(
+          //   // actions: [
+          //   //   IconButton(onPressed: signOutUser(context), icon: const Icon(Icons.logout))
+          //   // ],
+          //   title: Text('User Details'),
+          //   automaticallyImplyLeading: false,
+          // ),
           backgroundColor: Color(0xfff5f7fa),
           body: Column(children: [
             Stack(
@@ -31,16 +45,50 @@ class MyHomePage extends StatelessWidget {
                               fontSize: 32.0,
                               fontWeight: FontWeight.bold,
                             ),
-                            child: AnimatedTextKit(
-                              animatedTexts: [
-                                FadeAnimatedText('Hi Dalia, '),
-                                // FadeAnimatedText('do it RIGHT!!'),
-                                // FadeAnimatedText('do it RIGHT NOW!!!'),
-                              ],
-                              onTap: () {
-                                print("Tap Event");
+                            child: FutureBuilder<DocumentSnapshot>(
+                              future: getUserData(
+                                  FirebaseAuth.instance.currentUser!.uid),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+
+                                if (snapshot.hasError) {
+                                  return Center(
+                                    child: Text(
+                                        'Error occurred: ${snapshot.error}'),
+                                  );
+                                }
+
+                                if (!snapshot.hasData ||
+                                    !snapshot.data!.exists) {
+                                  return Center(
+                                    child: Text('User data not found.'),
+                                  );
+                                }
+
+                                // User data exists
+                                Map<String, dynamic> userData = snapshot.data!
+                                    .data() as Map<String, dynamic>;
+
+                                String name = userData['name'];
+                               
+
+                                return AnimatedTextKit(
+                                  animatedTexts: [
+                                    FadeAnimatedText('Hi ' + name),
+                                    // FadeAnimatedText('do it RIGHT!!'),
+                                    // FadeAnimatedText('do it RIGHT NOW!!!'),
+                                  ],
+                                  onTap: () {
+                                    print("Tap Event");
+                                  },
+                                  isRepeatingAnimation: true,
+                                );
                               },
-                              isRepeatingAnimation: true,
                             ),
                           ),
                           Text(
@@ -95,8 +143,14 @@ class MyHomePage extends StatelessWidget {
       ),
     );
   }
-}
 
+  signOutUser(BuildContext context) {
+    FirebaseAuth.instance.signOut();
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const UserTypeScreen()),
+        (route) => false);
+  }
+}
 
 class DevicesGridDashboard extends StatelessWidget {
   const DevicesGridDashboard({
@@ -127,54 +181,46 @@ class DevicesGridDashboard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CardField(
-                size,
-                Colors.blue,
-                Icon(
-                  Icons.science,
-                  color: Colors.white,
-                ),
-                'Science',
-              ),
-              CardField(
-                size,
-                Colors.amber,
-                Icon(Icons.abc, color: Colors.white),
-                'English',
-              ),
+                  size,
+                  Colors.blue,
+                  Icon(
+                    Icons.science,
+                    color: Colors.white,
+                  ),
+                  'Biology',
+                  context),
+              CardField(size, Colors.amber,
+                  Icon(Icons.abc, color: Colors.white), 'English', context),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CardField(
-                size,
-                Colors.orange,
-                Icon(Icons.calculate_outlined, color: Colors.white),
-                'Math',
-              ),
+                  size,
+                  Colors.orange,
+                  Icon(Icons.calculate_outlined, color: Colors.white),
+                  'Math',
+                  context),
               CardField(
-                size,
-                Colors.teal,
-                Icon(Icons.history_edu_outlined, color: Colors.white),
-                'History',
-              ),
+                  size,
+                  Colors.teal,
+                  Icon(Icons.history_edu_outlined, color: Colors.white),
+                  'History',
+                  context),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CardField(
-                size,
-                Colors.purple,
-                Icon(Icons.psychology_sharp, color: Colors.white),
-                'Physics',
-              ),
-              CardField(
-                size,
-                Colors.green,
-                Icon(Icons.signal_cellular_null_outlined, color: Colors.white),
-                'Calculas',
-              ),
+                  size,
+                  Colors.purple,
+                  Icon(Icons.psychology_sharp, color: Colors.white),
+                  'Physics',
+                  context),
+              CardField(size, Colors.green,
+                  Icon(Icons.book, color: Colors.white), 'Arabic', context),
             ],
           )
         ],
@@ -183,12 +229,37 @@ class DevicesGridDashboard extends StatelessWidget {
   }
 }
 
-CardField(Size size, Color color, Icon icon, String title) {
+CardField(
+    Size size, Color color, Icon icon, String title, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.all(2),
     child: GestureDetector(
       onTap: () {
-        // onTap;
+        print(title);
+        FireBaseController()
+            .firebaseFirestore
+            .collection('users')
+            .where('role', isEqualTo: 'tutor')
+            .where('subject', isEqualTo: title)
+            .get()
+            .then((value) {
+          List<Map<String, dynamic>> tempList = [];
+
+          value.docs.forEach((element) {
+            tempList.add(element.data());
+            print(element.data()['tutor_id']);
+            // print('------------------------------');
+          });
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TutorsList(
+                  subject: title,
+                  items: tempList,
+                ),
+              ));
+        });
       },
       child: Card(
           child: SizedBox(

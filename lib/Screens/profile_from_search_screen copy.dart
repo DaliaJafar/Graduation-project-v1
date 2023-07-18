@@ -9,6 +9,7 @@ import 'package:firebase_login_app/Screens/profile.dart';
 
 import 'package:flutter/material.dart';
 
+import '../Controllers/student_controller.dart';
 import '../Models/tutor.dart';
 
 class ProfilePage1Copy extends StatelessWidget {
@@ -68,7 +69,9 @@ class ProfilePage1Copy extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CalenderScreen(tutorObject: tutorObject,)));
+                                  builder: (context) => CalenderScreen(
+                                        tutorObject: tutorObject,
+                                      )));
                         },
                         heroTag: 'follow',
                         elevation: 0,
@@ -197,7 +200,7 @@ class ProfilePage1Copy extends StatelessWidget {
                         ),
                       ),
                       subtitle: Text(
-                        item['comment'],
+                        item['feedback'],
                         style: const TextStyle(
                           color: Colors.black,
                         ),
@@ -574,37 +577,4 @@ Widget _singleItem(BuildContext context, ProfileInfoItem item) {
       ],
     ),
   );
-}
-
-Future<String> getStudentName(DocumentSnapshot item) async {
-  final data = item.data() as Map<String, dynamic>?;
-
-  if (data != null && data.containsKey('studentId')) {
-    final studentId = data['studentId'] as String?;
-
-    if (studentId != null) {
-      final studentSnapshot = await FirebaseFirestore.instance
-          .collection('students')
-          .doc(studentId)
-          .get();
-
-      final studentData = studentSnapshot.data() as Map<String, dynamic>?;
-
-      if (studentData != null && studentData.containsKey('name')) {
-        return studentData['name'] as String;
-      }
-    }
-  }
-
-  return 'Unknown Student';
-}
-
-Future<String?> getStudentId(DocumentSnapshot item) async {
-  final data = item.data() as Map<String, dynamic>?;
-
-  if (data != null && data.containsKey('studentId')) {
-    return data['studentId'] as String?;
-  }
-
-  return null;
 }

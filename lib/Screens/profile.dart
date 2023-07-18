@@ -11,6 +11,7 @@ import 'package:firebase_login_app/Screens/edit_screen.dart';
 
 import 'package:flutter/material.dart';
 
+import '../Controllers/student_controller.dart';
 import '../Models/tutor.dart';
 
 class UserProfilePage1 extends StatelessWidget {

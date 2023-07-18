@@ -7,20 +7,20 @@ Stream<QuerySnapshot> getReviews(String tutorId) {
       .snapshots();
 }
 
-Future<String> getStudentName(QueryDocumentSnapshot<Object?> doc) async {
-  String studentName = '';
-  var studentId = doc['student_id'];
-  QuerySnapshot snapshot = await FirebaseFirestore.instance
-      .collection('users')
-      .where('student_id', isEqualTo: studentId)
-      .get();
-  if (snapshot.size > 0) {
-    studentName = snapshot.docs[0]['name'];
-    print('Student Name: $studentName');
-    return studentName;
-  }
-  return studentName;
-}
+// Future<String> getStudentName(QueryDocumentSnapshot<Object?> doc) async {
+//   String studentName = '';
+//   var studentId = doc['student_id'];
+//   QuerySnapshot snapshot = await FirebaseFirestore.instance
+//       .collection('users')
+//       .where('student_id', isEqualTo: studentId)
+//       .get();
+//   if (snapshot.size > 0) {
+//     studentName = snapshot.docs[0]['name'];
+//     print('Student Name: $studentName');
+//     return studentName;
+//   }
+//   return studentName;
+// }
 
 Future<void> addReview(
     String tutorId, double rating, String feedback, String studentId) async {
@@ -51,8 +51,8 @@ Future<double> avgRates(String tutorId) async {
   double avg = 0;
   for (var doc in snapshot.docs) {
     var data = doc.data();
-    if (data['rate'] != null) {
-      double rate = double.parse(data['rate']);
+    if (data['rating'] != null) {
+      double rate = data['rating'];
       sum += rate;
     }
   }

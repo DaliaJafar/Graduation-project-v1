@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_login_app/Models/session.dart';
 import 'package:firebase_login_app/Screens/login_screen.dart';
 import 'package:firebase_login_app/Screens/signup_screen.dart';
+import 'package:firebase_login_app/Screens/studySession_details_screen.dart';
 import 'package:flutter/material.dart';
 import '../Constants/firestore.dart';
 import '../Controllers/sessions_controller.dart';
@@ -131,7 +132,22 @@ class _UserTypeScreenState extends State<UpcomingSessionsScreenCopy> {
                           ),
                           trailing: Padding(
                             padding: const EdgeInsets.all(3.0),
-                            child: Text(document['subject']),
+                            child: IconButton(
+                              icon: const Icon(Icons.density_small_outlined),
+                              onPressed: () {
+                                StudySession studySession =
+                                    intializeStudySessionModel(document);
+                                setState(() {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              StudySessionDetailsScreen(
+                                                studySession: studySession,
+                                              )));
+                                });
+                              },
+                            ),
                           ),
                         ),
                       ),
@@ -144,5 +160,19 @@ class _UserTypeScreenState extends State<UpcomingSessionsScreenCopy> {
         );
       },
     );
+  }
+
+  StudySession intializeStudySessionModel(QueryDocumentSnapshot document) {
+    StudySession studySession = StudySession(
+        date: document['date'] ?? Timestamp.now(),
+        location: document['location'] ?? '',
+        period: document['period'] ?? '',
+        sessionId: document['session_id'] ?? '',
+        status: document['status'] ?? '',
+        studentId: document['student_id'] ?? '',
+        subject: document['subject'] ?? '',
+        time: document['time'] ?? '',
+        tutorId: document['tutor_id'] ?? '');
+    return studySession;
   }
 }

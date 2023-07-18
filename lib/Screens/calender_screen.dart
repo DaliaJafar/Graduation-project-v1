@@ -153,81 +153,84 @@ class _CalenderState extends State<CalenderScreen> {
                   child: calendar(),
                 ),
               ),
-              // eventsOfTheDay.length == 0
-              //     ? Container()
-              // :
-              SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: getUpcomingSessionsByDate(_targetDateTime),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const CircularProgressIndicator();
-                      }
-                      final documents = snapshot.data!.docs;
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListView.builder(
-                          itemCount: documents.length,
-                          itemBuilder: (context, index) {
-                            final document = documents[index];
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
+              eventsOfTheDay.length == 0
+                  ? Container()
+                  : SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      child:
+                          // StreamBuilder<QuerySnapshot>(
+                          //       stream: getUpcomingSessionsByDate(_targetDateTime),
+                          //       builder: (context, snapshot) {
+                          //         if (!snapshot.hasData) {
+                          //           return const CircularProgressIndicator();
+                          //         }
+                          //         final documents = snapshot.data!.docs;
+                          //         return Padding(
+                          //           padding: const EdgeInsets.all(8.0),
+                          //           child: ListView.builder(
+                          //             itemCount: documents.length,
+                          //             itemBuilder: (context, index) {
+                          //               final document = documents[index];
+                          //               return Padding(
+                          //                 padding: const EdgeInsets.all(8.0),
+                          //                 child: Card(
+                          //                   shape: RoundedRectangleBorder(
+                          //                     borderRadius: BorderRadius.circular(15.0),
+                          //                   ),
+                          //                   color: Color.fromARGB(255, 197, 182, 197),
+                          //                   elevation: 10,
+                          //                   child: Column(
+                          //                     // mainAxisSize: MainAxisSize.min,
+                          //                     children: <Widget>[
+                          //                       Padding(
+                          //                         padding: const EdgeInsets.all(10.0),
+                          //                         child: ListTile(
+                          //                           // leading: ,
+                          //                           title: Text(document['date']),
+                          //                           subtitle: Text(document['period']),
+                          //                         ),
+                          //                       ),
+                          //                     ],
+                          //                   ),
+                          //                 ),
+                          //               );
+                          //             },
+                          //           ),
+                          //         );
+                          //       },
+                          //     )
+                          ListView.builder(
+                        itemCount: eventsOfTheDay.length,
+                        itemBuilder: (context, index) {
+                          final event = eventsOfTheDay[index];
+                          return Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Color.fromARGB(255, 106, 102, 102),
                                 ),
-                                color: Color.fromARGB(255, 197, 182, 197),
-                                elevation: 10,
-                                child: Column(
-                                  // mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: ListTile(
-                                        // leading: ,
-                                        title: Text(document['date']),
-                                        subtitle: Text(document['period']),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50)),
                               ),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  )
-                  //     ListView.builder(
-                  //   itemCount: eventsOfTheDay.length,
-                  //   itemBuilder: (context, index) {
-                  //     final event = eventsOfTheDay[index];
-                  //     return Padding(
-                  //       padding: const EdgeInsets.all(6.0),
-                  //       child: Container(
-                  //         decoration: BoxDecoration(
-                  //           border: Border.all(
-                  //             color: Color.fromARGB(255, 106, 102, 102),
-                  //           ),
-                  //           borderRadius: BorderRadius.all(Radius.circular(50)),
-                  //         ),
-                  //         child: ListTile(
-                  //           contentPadding: const EdgeInsets.all(5.0),
-                  //           leading: Text(''),
-                  //           title: Text(
-                  //               '${event.date.day}/${event.date.month}/${event.date.year}'),
-                  //           subtitle: Text('eventsOfTheDay'),
-                  //         ),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
-                  ),
+                              child: ListTile(
+                                contentPadding: const EdgeInsets.all(5.0),
+                                leading: Text(''),
+                                title: Text(
+                                    '${event.date.day}/${event.date.month}/${event.date.year}'),
+                                subtitle: Text('eventsOfTheDay'),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: FloatingActionButton.extended(
                   onPressed: () {
+                    print('onPressed');
+                    print(_targetDateTime);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -256,17 +259,18 @@ class _CalenderState extends State<CalenderScreen> {
           _targetDateTime = date;
           print('_targetDateTime');
           print(_targetDateTime);
-          eventsOfTheDay.clear();
-          eventsOfTheDay.add(Event(date: date));
-          eventsOfTheDay.add(Event(date: date));
+          // eventsOfTheDay.clear();
+          // eventsOfTheDay.add(Event(date: date));
+          // eventsOfTheDay.add(Event(date: date));
           // _showSessionsDialog(date);
           // eventsOfTheDay.add(Event(date: date));
         });
         print('day pressed !');
-        setState(() {
-          _currentDate = date;
-          // _showSessionsDialog(date);
-        });
+
+        print(_targetDateTime);
+        // _currentDate = date;
+        // _showSessionsDialog(date);
+
         events.forEach((event) => print(event.title));
       },
       daysHaveCircularBorder: true,
@@ -314,8 +318,8 @@ class _CalenderState extends State<CalenderScreen> {
       ),
       onCalendarChanged: (DateTime date) {
         setState(() {
-          _targetDateTime = date;
-          _currentMonth = DateFormat.yMMM().format(_targetDateTime);
+          _currentDate = date;
+          _currentMonth = DateFormat.yMMM().format(_currentDate);
         });
       },
       onDayLongPressed: (DateTime date) {

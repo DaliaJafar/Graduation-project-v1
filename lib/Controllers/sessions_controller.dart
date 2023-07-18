@@ -88,6 +88,24 @@ Future<String> getStudentName111(String studentId) async {
   return studentName;
 }
 
+Future<String> getTutorName111(String tutotId) async {
+  String tutorName = '';
+  // var studentId = doc['student_id'];
+  QuerySnapshot snapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .where('tutor_id', isEqualTo: tutotId)
+      .where('role', isEqualTo: 'tutor')
+      .get();
+  print('hi');
+  if (snapshot.size > 0) {
+    print('if');
+    tutorName = snapshot.docs[0]['name'];
+    print('Student Name: $tutorName');
+    return tutorName;
+  }
+  return tutorName;
+}
+
 void addSession(DateTime day, String location, String period, DateTime time,
     String tutorId, String studentId, String subject) {
   FireBaseController().firebaseFirestore.collection('study_session').doc().set({
