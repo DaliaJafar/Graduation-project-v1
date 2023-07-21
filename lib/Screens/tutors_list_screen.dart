@@ -66,9 +66,8 @@ class _TutorsListState extends State<TutorsList> {
                   child: ListTile(
                     contentPadding: const EdgeInsets.all(20.0),
                     leading: CircleAvatar(
-                      radius: 35, // Adjust the radius as per your preference
-                      backgroundImage: NetworkImage(tutor[
-                          'profile_picture']), // Replace with your image URL or use AssetImage for local images
+                      radius: 35,
+                      backgroundImage: NetworkImage(tutor['profile_picture']),
                     ),
                     title: Text(tutor['name']),
                     subtitle:
@@ -79,14 +78,17 @@ class _TutorsListState extends State<TutorsList> {
                           AsyncSnapshot<double> snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return CircularProgressIndicator(); // Show a loading indicator while waiting
+                          return CircularProgressIndicator();
                         }
                         if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
                         }
                         return Column(
                           children: [
-                            Icon(Icons.star_rate),
+                            const Icon(
+                              Icons.star_rate,
+                              color: Color.fromARGB(255, 237, 230, 160),
+                            ),
                             Text(snapshot.data.toString()),
                           ],
                         );
@@ -114,6 +116,7 @@ class _TutorsListState extends State<TutorsList> {
                           .collection('users')
                           .where('role', isEqualTo: 'tutor')
                           .where('tutor_id', isEqualTo: tutor['tutor_id'])
+                          .orderBy('avg_rate', descending: true)
                           .get();
 
                       Navigator.push(
@@ -179,7 +182,7 @@ class _TutorsListState extends State<TutorsList> {
             min: 0,
             max: 100,
             divisions: 20,
-            activeColor: Colors.red,
+            activeColor: Colors.purple,
             inactiveColor: Colors.red.shade100,
             label: value.round().toString(),
             onChanged: (value) {
@@ -189,6 +192,35 @@ class _TutorsListState extends State<TutorsList> {
               });
             },
           ),
+          //  const ListTile(
+          //   leading: const Icon(Icons.menu_book),
+          //   title: const Text("Experience"),
+          //   // onTap: () {
+          //   //   setState(() {
+          //   //     widget.items.sort((a, b) => double.parse(a['hourly_rate'])
+          //   //         .compareTo(double.parse(b['hourly_rate'])));
+          //   //     widget.items.forEach((element) {
+          //   //       print('hourly_rate: ${element['hourly_rate']}');
+          //   //     });
+          //   //   });
+          //   // },
+          // ),
+          // Slider(
+          //   value: value,
+          //   min: 1,
+          //   max: 4,
+          //   divisions: 1,
+          //   activeColor: Colors.purple,
+          //   inactiveColor: Colors.red.shade100,
+          //   label: value.round().toString(),
+          //   onChanged: (value) {
+          //     setState(() {
+          //       this.value = value;
+          //       print(value);
+          //     });
+          //   },
+          // ),
+
           // const ListTile(
           //   leading: Icon(Icons.location_city),
           //   title: Text("City Name"),

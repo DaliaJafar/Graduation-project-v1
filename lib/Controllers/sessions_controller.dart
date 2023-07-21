@@ -100,10 +100,25 @@ Future<String> getTutorName111(String tutotId) async {
   if (snapshot.size > 0) {
     print('if');
     tutorName = snapshot.docs[0]['name'];
-    print('Student Name: $tutorName');
+    print('Tutor Name: $tutorName');
     return tutorName;
   }
   return tutorName;
+}
+
+Future<String> getTutorImage(String tutotId) async {
+  String imageURL = '';
+  // var studentId = doc['student_id'];
+  QuerySnapshot snapshot = await FirebaseFirestore.instance
+      .collection('users')
+      .where('tutor_id', isEqualTo: tutotId)
+      .where('role', isEqualTo: 'tutor')
+      .get();
+  if (snapshot.size > 0) {
+    imageURL = snapshot.docs[0]['profile_picture'];
+    return imageURL;
+  }
+  return imageURL;
 }
 
 void addSession(DateTime day, String location, String period, DateTime time,

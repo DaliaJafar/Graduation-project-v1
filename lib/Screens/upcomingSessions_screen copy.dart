@@ -29,10 +29,10 @@ class _UserTypeScreenState extends State<UpcomingSessionsScreenCopy> {
       length: 2,
       child: Scaffold(
           appBar: AppBar(
-            title: Text("Flutter TabBar Example - Customized "),
+            title: const Text("Sessions"),
           ),
           body: Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
                 Container(
@@ -92,7 +92,7 @@ class _UserTypeScreenState extends State<UpcomingSessionsScreenCopy> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  color: Color.fromARGB(255, 197, 182, 197),
+                  color: const Color.fromARGB(255, 197, 182, 197),
                   elevation: 10,
                   child: Column(
                     // mainAxisSize: MainAxisSize.min,
@@ -100,11 +100,35 @@ class _UserTypeScreenState extends State<UpcomingSessionsScreenCopy> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: ListTile(
-                          leading: const CircleAvatar(
-                            radius:
-                                35, // Adjust the radius as per your preference
-                            backgroundImage: NetworkImage(
-                                'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?cs=srgb&dl=pexels-pixabay-220453.jpg&fm=jpg'), // Replace with your image URL or use AssetImage for local images
+                          leading: FutureBuilder<String>(
+                            future: getTutorImage(document[
+                                'tutor_id']), // Replace 'tutorId' with the actual tutor ID
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                // While waiting for the image URL, you can show a placeholder or a loading indicator
+                                return const CircleAvatar(
+                                  radius: 35,
+                                  backgroundColor: Colors
+                                      .grey, // You can set any placeholder color you like
+                                );
+                              } else if (snapshot.hasData &&
+                                  snapshot.data != '') {
+                                // If an image URL is available, use it
+                                return CircleAvatar(
+                                  radius: 35,
+                                  backgroundImage: NetworkImage(snapshot.data!),
+                                );
+                              } else {
+                                // If no image URL is available, you can show a default avatar or another placeholder
+                                return const CircleAvatar(
+                                  radius: 35,
+                                  // You can use AssetImage for a local default avatar
+                                  backgroundImage:
+                                      AssetImage('path/to/default_avatar.png'),
+                                );
+                              }
+                            },
                           ),
                           title: Padding(
                             padding: const EdgeInsets.all(3.0),
@@ -113,13 +137,13 @@ class _UserTypeScreenState extends State<UpcomingSessionsScreenCopy> {
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return Text('');
+                                  return const Text('');
                                 } else if (snapshot.hasData) {
                                   return Text(snapshot.data!);
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {
-                                  return Text('No tutor name available');
+                                  return const Text('No tutor name available');
                                 }
                               },
                             ),

@@ -57,6 +57,9 @@ Future<double> avgRates(String tutorId) async {
     }
   }
   avg = sum / snapshot.docs.length;
+  final CollectionReference tutorsCollection =
+      FirebaseFirestore.instance.collection('users');
+  await tutorsCollection.doc(tutorId).update({'avg_rate': avg});
 
   return avg;
 }

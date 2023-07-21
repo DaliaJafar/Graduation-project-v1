@@ -10,6 +10,7 @@ import 'package:firebase_login_app/Screens/student_profile.dart';
 import 'package:firebase_login_app/Screens/upcomingSessions_screen%20copy.dart';
 import 'package:firebase_login_app/Screens/usertype_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_login_app/Screens/home_screen_test.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({Key? key}) : super(key: key);
@@ -21,8 +22,8 @@ class NavigationScreen extends StatefulWidget {
 class _NavigationScreenState extends State<NavigationScreen>
     with TickerProviderStateMixin<NavigationScreen> {
   static const List<Destination> allDestinations = <Destination>[
-    Destination(0, 'Home', Icons.home, Colors.purple, HomeScreen()),
-    Destination(1, 'Calendar', Icons.calendar_month_outlined, Colors.purple,
+    Destination(0, 'Home', Icons.home, Colors.purple, MyHomePage() ),
+    Destination(1, 'Lessons', Icons.calendar_month_outlined, Colors.purple,
         UpcomingSessionsScreenCopy()),
     Destination(
         2, 'Map', Icons.map_outlined, Colors.purple, SearchByMapScreen()),

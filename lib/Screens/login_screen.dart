@@ -118,6 +118,7 @@ class _LogInScreenState extends State<LogInScreen> {
           },
         );
       } else {
+        print(e.code);
         showDialog(
           context: context,
           builder: (context) {
