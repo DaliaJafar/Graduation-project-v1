@@ -24,7 +24,7 @@ class _StudySessionRequestScreenState extends State<StudySessionRequestScreen> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 228, 243),
       appBar: AppBar(
-        title: const Text("Flutter "),
+        title: const Text("Request "),
       ),
       body: Column(
         children: [

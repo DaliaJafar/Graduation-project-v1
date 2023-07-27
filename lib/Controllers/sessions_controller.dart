@@ -42,12 +42,21 @@ Stream<QuerySnapshot> getUpcomingSessionsTutor(String tutorId) {
 
 Stream<QuerySnapshot> getUpcomingSessionsByDate(DateTime date) {
   print('getUpcomingSessionsByDate');
-  print(date);
-  return FirebaseFirestore.instance
+  print(date.toString());
+  // Timestamp firestoreTimestamp = Timestamp.fromDate(date);
+  String dateString = "${date.year}-${date.month}-${date.day}";
+  print(dateString);
+  // print(firestoreTimestamp);
+  Stream<QuerySnapshot<Map<String, dynamic>>> snapshots = FirebaseFirestore
+      .instance
       .collection('study_session')
       .where('status', isEqualTo: 'upcoming')
-      .where('date', isEqualTo: date)
+      .where('date', isEqualTo: dateString)
       .snapshots();
+  snapshots.listen((snapshot) {
+    print('Snapshot Length: ${snapshot.docs.length}');
+  });
+  return snapshots;
 }
 
 Future<String> getTutorName(QueryDocumentSnapshot<Object?> doc) async {
@@ -191,7 +200,8 @@ Future<List<DateTime>> getDatesOfSessions() async {
       .collection('study_session')
       .where('status', isEqualTo: 'upcoming')
       .get();
-
+  int snapshotLength = snapshot.docs.length;
+  print('Snapshot Length 666: $snapshotLength');
   final List<DateTime> upcomingDates = [];
 
   for (var doc in snapshot.docs) {
