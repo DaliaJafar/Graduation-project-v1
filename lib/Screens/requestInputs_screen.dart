@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_login_app/Components/widgets.dart';
+import 'package:firebase_login_app/Controllers/NotificationController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:firebase_login_app/Controllers/sessions_controller.dart';
@@ -18,6 +19,8 @@ class RequestInputsScreen extends StatefulWidget {
 
 class _RequestInputsState extends State<RequestInputsScreen> {
   final userId = FirebaseAuth.instance.currentUser!.uid;
+
+  NotificationController notificationController = NotificationController();
   static const List<String> hours = <String>[
     '1 hour',
     '2 hours',
@@ -37,6 +40,8 @@ class _RequestInputsState extends State<RequestInputsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String dateString =
+        "${widget.date.year}-${widget.date.month}-${widget.date.day}";
     return Scaffold(
       appBar: AppBar(
         title: const Text('Request Study Session'),
@@ -50,7 +55,8 @@ class _RequestInputsState extends State<RequestInputsScreen> {
               child: Column(
                 children: [
                   // Text('Time '),
-                  Text(widget.date.toString()),
+
+                  Text(dateString),
                   timePicker(),
                   const SizedBox(
                     height: 50,
@@ -162,10 +168,13 @@ class _RequestInputsState extends State<RequestInputsScreen> {
               style: const ButtonStyle(
                   backgroundColor:
                       MaterialStatePropertyAll<Color>(Colors.purple)),
-              onPressed: () {
+              onPressed: () async {
+                String dateString =
+                    "${widget.date.year}-${widget.date.month}-${widget.date.day}";
+
                 setState(() {
                   addSession(
-                      widget.date,
+                      dateString,
                       location_controller.text,
                       period,
                       _dateTime,
@@ -185,6 +194,17 @@ class _RequestInputsState extends State<RequestInputsScreen> {
                     },
                   ),
                 );
+
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                var meso = await getStudentName111(userId);
+                print(widget.tutorObject.token);
+                print("////////////////////////////////////////");
+                print("meso is the king ");
+
+                notificationController.sendNotification(
+                    widget.tutorObject.token,
+                    "New Request !!",
+                    "${meso} has requested a new vodlka");
 
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },

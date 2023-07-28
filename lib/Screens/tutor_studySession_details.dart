@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:intl/intl.dart';
 
-class StudySessionDetailsScreen extends StatefulWidget {
+class TutorStudySessionDetailsScreen extends StatefulWidget {
   final StudySession studySession;
-  const StudySessionDetailsScreen({required this.studySession, Key? key})
+  const TutorStudySessionDetailsScreen({required this.studySession, Key? key})
       : super(key: key);
 
   @override
@@ -15,7 +15,8 @@ class StudySessionDetailsScreen extends StatefulWidget {
       _StudySessionDetailsScreenState();
 }
 
-class _StudySessionDetailsScreenState extends State<StudySessionDetailsScreen> {
+class _StudySessionDetailsScreenState
+    extends State<TutorStudySessionDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     // final dateFormat = DateFormat('yyyy-MM-dd');
@@ -24,7 +25,7 @@ class _StudySessionDetailsScreenState extends State<StudySessionDetailsScreen> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 228, 243),
       appBar: AppBar(
-        title: const Text(""),
+        title: const Text("Flutter "),
       ),
       body: Column(
         children: [
@@ -47,7 +48,7 @@ class _StudySessionDetailsScreenState extends State<StudySessionDetailsScreen> {
                   children: [
                     nameContainer(
                       context,
-                      widget.studySession.tutorId.toString(),
+                      widget.studySession.studentId.toString(),
                     )
                   ],
                 ),
@@ -142,7 +143,7 @@ class _StudySessionDetailsScreenState extends State<StudySessionDetailsScreen> {
         ),
       ),
       FutureBuilder(
-        future: getTutorName111(uid),
+        future: getStudentName111(uid),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(

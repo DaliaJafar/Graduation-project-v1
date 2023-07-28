@@ -63,6 +63,7 @@ class _MapScreenState extends State<MapScreen> {
                                   phone: documents[i]['phone'],
                                   profile_pic: documents[i]['profile_picture'],
                                   qualification: documents[i]['qualification'],
+                                  token: documents[i]['token'],
                                   role: documents[i]['role'],
                                   subject: documents[i]['subject']);
                               print(documents[i]['subject']);

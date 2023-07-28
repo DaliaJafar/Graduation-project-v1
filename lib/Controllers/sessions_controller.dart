@@ -40,18 +40,32 @@ Stream<QuerySnapshot> getUpcomingSessionsTutor(String tutorId) {
       .snapshots();
 }
 
-Stream<QuerySnapshot> getUpcomingSessionsByDate(DateTime date) {
+Stream<QuerySnapshot> getUpcomingSessionsByDate(DateTime date, String tutorId) {
   print('getUpcomingSessionsByDate');
   print(date.toString());
   // Timestamp firestoreTimestamp = Timestamp.fromDate(date);
+  Timestamp firestoreTimestamp = Timestamp.fromDate(date);
+
   String dateString = "${date.year}-${date.month}-${date.day}";
   print(dateString);
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> snapshots1 = FirebaseFirestore
+      .instance
+      .collection('study_session')
+      .where('status', isEqualTo: 'upcoming')
+      .where('tutor_id', isEqualTo: tutorId)
+      .snapshots();
+  snapshots1.listen((snapshot) {
+    print('Snapshot Length11111111: ${snapshot.docs.length}');
+  });
+
   // print(firestoreTimestamp);
   Stream<QuerySnapshot<Map<String, dynamic>>> snapshots = FirebaseFirestore
       .instance
       .collection('study_session')
       .where('status', isEqualTo: 'upcoming')
-      .where('date', isEqualTo: dateString)
+      .where('tutor_id', isEqualTo: tutorId)
+      .where('date', isEqualTo: firestoreTimestamp)
       .snapshots();
   snapshots.listen((snapshot) {
     print('Snapshot Length: ${snapshot.docs.length}');
@@ -130,13 +144,15 @@ Future<String> getTutorImage(String tutotId) async {
   return imageURL;
 }
 
-void addSession(DateTime day, String location, String period, DateTime time,
+void addSession(String day, String location, String period, DateTime time,
     String tutorId, String studentId, String subject) {
-  FireBaseController().firebaseFirestore.collection('study_session').doc().set({
+  final newSessionRef =
+      FireBaseController().firebaseFirestore.collection('study_session').doc();
+  newSessionRef.set({
     "date": day,
     "location": location,
     "period": period,
-    "session_id": "66",
+    "session_id": newSessionRef.id,
     "status": "pending",
     "student_id": studentId,
     "subject": subject,

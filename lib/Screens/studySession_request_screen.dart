@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_login_app/Components/widgets.dart';
+import 'package:firebase_login_app/Controllers/NotificationController.dart';
 import 'package:firebase_login_app/Controllers/sessions_controller.dart';
+import 'package:firebase_login_app/Controllers/users_controller.dart';
 import 'package:firebase_login_app/Models/session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
@@ -16,10 +19,12 @@ class StudySessionRequestScreen extends StatefulWidget {
 }
 
 class _StudySessionRequestScreenState extends State<StudySessionRequestScreen> {
+  NotificationController notificationController = NotificationController();
+
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat('yyyy-MM-dd');
-    final formattedDate = dateFormat.format(widget.studySession.date.toDate());
+    // final dateFormat = DateFormat('yyyy-MM-dd');
+    // final formattedDate = dateFormat.format(widget.studySession.date.toDate());
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 228, 243),
@@ -86,7 +91,7 @@ class _StudySessionRequestScreenState extends State<StudySessionRequestScreen> {
                   children: [
                     const Icon(Icons.date_range_outlined),
                     const SizedBox(width: 20),
-                    Text(formattedDate.toString(),
+                    Text(widget.studySession.date,
                         style: TextStyle(
                             color: Colors.black.withOpacity(0.8),
                             fontSize: 20)),
@@ -103,6 +108,16 @@ class _StudySessionRequestScreenState extends State<StudySessionRequestScreen> {
                     const Icon(Icons.location_pin),
                     const SizedBox(width: 15),
                     Text(widget.studySession.location.toString(),
+                        style: TextStyle(
+                            color: Colors.black.withOpacity(0.8),
+                            fontSize: 20)),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Icon(Icons.timelapse_sharp),
+                    const SizedBox(width: 20),
+                    Text(widget.studySession.period.toString(),
                         style: TextStyle(
                             color: Colors.black.withOpacity(0.8),
                             fontSize: 20)),
@@ -238,7 +253,7 @@ class _StudySessionRequestScreenState extends State<StudySessionRequestScreen> {
               style: const ButtonStyle(
                   backgroundColor:
                       MaterialStatePropertyAll<Color>(Colors.purple)),
-              onPressed: () {
+              onPressed: () async {
                 updateSessionStatusBySessionId(
                     studySession.sessionId.toString());
                 // setState(() {
@@ -246,6 +261,15 @@ class _StudySessionRequestScreenState extends State<StudySessionRequestScreen> {
                 //       studySession.sessionId.toString());
                 //   print('approved');
                 // });
+
+                String f5f5 = await getDeviceToken(
+                    widget.studySession.studentId.toString());
+
+                String roa = await getTutorName111(
+                    FirebaseAuth.instance.currentUser!.uid);
+                notificationController.sendNotification(
+                    f5f5, "Approved!!", "${roa} has approved your request ");
+
                 Navigator.of(context).pop();
 
                 final snackBar = SnackBar(
@@ -301,8 +325,16 @@ class _StudySessionRequestScreenState extends State<StudySessionRequestScreen> {
               style: const ButtonStyle(
                   backgroundColor:
                       MaterialStatePropertyAll<Color>(Colors.purple)),
-              onPressed: () {
+              onPressed: () async {
                 deleteSessionBySessionId(studySession.sessionId.toString());
+
+                String f5f5 = await getDeviceToken(
+                    widget.studySession.studentId.toString());
+
+                String roa = await getTutorName111(
+                    FirebaseAuth.instance.currentUser!.uid);
+                notificationController.sendNotification(
+                    f5f5, "Rejected!!", "${roa} has rejected your request ");
 
                 Navigator.of(context).pop();
 

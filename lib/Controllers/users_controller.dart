@@ -33,6 +33,18 @@ import '../Models/tutor.dart';
     return userRef.get();
   }
 
+  Future<String> getDeviceToken( String uuid ) async{
+
+    
+     DocumentReference documentReference =   FirebaseFirestore.instance.collection('users').doc(uuid);
+     var meso = await documentReference.get();
+     String khwaja = meso['token'];
+
+     return khwaja;
+
+
+  }
+
   Stream<QuerySnapshot> getTutorsDataBasedOnSubject(String subject) {
   return FirebaseFirestore.instance
       .collection('users')
@@ -55,6 +67,7 @@ Tutor initalizeTutorModel(DocumentSnapshot document) {
     profile_pic: data['profile_picture'] ?? '',
     qualification: data['qualification'] ?? '',
     role: data['role'] ?? '',
+    token: data['token']?? '',
     subject: data['subject'] ?? '',
   );
 }

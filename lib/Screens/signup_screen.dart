@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_login_app/Controllers/signup_controller%20copy.dart';
+import 'package:firebase_login_app/Screens/home_screen_test.dart';
 import 'package:firebase_login_app/Screens/tutor_signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_login_app/utils/colors_utils.dart';
@@ -128,10 +129,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => HomeScreen()));
+                                      builder: (context) => MyHomePage()));
                             }
-                          }
-                          else{
+                          } else {
                             showAlertDialog(context);
                           }
                         })

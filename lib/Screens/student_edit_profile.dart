@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_login_app/Controllers/users_controller.dart';
+import 'package:firebase_login_app/Screens/usertype_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -44,6 +45,13 @@ class _StudentEditProfileUIState extends State<StudentEditProfileUI> {
         //     ),
         //   ),
         // ),
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: const Text("Edit Profile "),
+          actions: [
+            IconButton(onPressed: signOutUser, icon: const Icon(Icons.logout))
+          ],
+        ),
         body: FutureBuilder<DocumentSnapshot>(
           future: getUserData(FirebaseAuth.instance.currentUser!.uid),
           builder: (context, snapshot) {
@@ -94,7 +102,7 @@ class _StudentEditProfileUIState extends State<StudentEditProfileUI> {
                     buildTextField("Password", "********", true),
                     buildTextField("Location", userData['location'], false),
                     buildTextField("Phone", userData['phone'], false),
-                    buildTextField("Role", userData['role'], false),
+                    //      buildTextField("Role", userData['role'], false),
                     const SizedBox(
                       height: 30,
                     ),
@@ -180,5 +188,12 @@ class _StudentEditProfileUIState extends State<StudentEditProfileUI> {
         ),
       ),
     );
+  }
+
+  signOutUser() {
+    FirebaseAuth.instance.signOut();
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const UserTypeScreen()),
+        (route) => false);
   }
 }

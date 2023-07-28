@@ -83,9 +83,9 @@ class _UserTypeScreenState extends State<UpcomingSessionsScreenCopy> {
             itemCount: documents.length,
             itemBuilder: (context, index) {
               final document = documents[index];
-              final Timestamp timestamp = document['date']!;
-              final dateFormat = DateFormat('yyyy-MM-dd');
-              final formattedDate = dateFormat.format(timestamp.toDate());
+              final String date = document['date']!;
+              // final dateFormat = DateFormat('yyyy-MM-dd');
+              // final formattedDate = dateFormat.format(timestamp.toDate());
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
@@ -152,7 +152,7 @@ class _UserTypeScreenState extends State<UpcomingSessionsScreenCopy> {
                             padding: const EdgeInsets.all(3.0),
                             child: Text(document['subject'] +
                                 "\n\n" +
-                                formattedDate.toString()),
+                                date),
                           ),
                           trailing: Padding(
                             padding: const EdgeInsets.all(3.0),

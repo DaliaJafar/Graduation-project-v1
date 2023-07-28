@@ -110,22 +110,18 @@ class _SearchScreenState extends State<SearchScreen> {
                             print('itim');
                             tempList.add(element.data());
                             print(element.data()['tutor_id']);
-                            // print('------------------------------');
                           });
 
                           double calculateAverageRate(
                               Map<String, dynamic> tutorData) {
-                            // Replace 'avg_rates' with the field that holds the average rates for each tutor
                             return tutorData['avg_rate'];
                           }
 
                           tempList.sort((tutor1, tutor2) {
                             double avgRate1 = calculateAverageRate(tutor1);
                             double avgRate2 = calculateAverageRate(tutor2);
-                            print('999');
-                            print(avgRate1);
-                            return avgRate2.compareTo(
-                                avgRate1); // For descending order, use avgRate2 - avgRate1
+
+                            return avgRate2.compareTo(avgRate1);
                           });
                           Navigator.push(
                               context,

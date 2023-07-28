@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class Tutor {
   final String id;
@@ -12,6 +13,7 @@ class Tutor {
   final String profile_pic;
   final String role;
   final String qualification;
+  final String token ; 
 
   const Tutor({
     required this.id,
@@ -25,6 +27,7 @@ class Tutor {
     required this.profile_pic,
     required this.role,
     required this.qualification,
+    required this.token
   });
   // factory Tutor.fromSnapshow(DocumentSnapshot<Map<String,dynamic>> document){
   //   final data = document.data()!;

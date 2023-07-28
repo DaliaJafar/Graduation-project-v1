@@ -2,29 +2,16 @@
 //import 'dart:js_util';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_login_app/Screens/edit_profile_old.dart';
-import 'package:firebase_login_app/Screens/login_screen.dart';
-import 'package:firebase_login_app/Screens/requestedSessions_screen.dart';
-// import 'package:firebase_login_app/Screens/requested_session_dialog.dart';
-import 'package:firebase_login_app/Screens/search_screen.dart';
-import 'package:firebase_login_app/Screens/requestInputs_screen.dart';
-import 'package:firebase_login_app/Screens/upcomingSessions_screen%20copy.dart';
 import 'package:firebase_login_app/Screens/usertype_screen.dart';
 import 'package:firebase_login_app/firebase_options.dart';
-import 'package:firebase_login_app/test.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'Screens/edit_screen.dart';
-import 'Screens/home_screen_test.dart';
-import 'Screens/map_screen.dart';
-import 'Screens/navigation_screen.dart';
-import 'Screens/profile.dart';
-import 'Screens/profile_from_search_screen.dart';
-import 'Screens/calender_screen.dart';
-import 'Screens/studySession_request_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessage.listen(_firebaseMessagingForegroundHandler);
   runApp(const MyApp());
 }
 
@@ -41,4 +28,20 @@ class MyApp extends StatelessWidget {
       home: UserTypeScreen(),
     );
   }
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+
+  print("Handling a background message: ${message.messageId}");
+}
+
+Future<void> _firebaseMessagingForegroundHandler(RemoteMessage message) async {
+  print('Foreground Notification:');
+  print('Title: ${message.notification?.title}');
+  print('Body: ${message.notification?.body}');
+
+  // Handle the received notification here
+  // Perform any necessary actions, such as displaying a custom UI, updating data, or navigating to a specific screen
 }

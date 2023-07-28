@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_login_app/Controllers/student_controller.dart';
 import 'package:firebase_login_app/Models/session.dart';
 import 'package:firebase_login_app/Screens/login_screen.dart';
 import 'package:firebase_login_app/Screens/signup_screen.dart';
 import 'package:firebase_login_app/Screens/studySession_details_screen.dart';
 import 'package:firebase_login_app/Screens/studySession_request_screen.dart';
+import 'package:firebase_login_app/Screens/tutor_studySession_details.dart';
 import 'package:flutter/material.dart';
 import '../Constants/firestore.dart';
 import '../Controllers/sessions_controller.dart';
@@ -83,9 +85,9 @@ class _UserTypeScreenState extends State<TutorUpcomingSessionsScreen> {
             itemBuilder: (context, index) {
               final document = documents[index];
 
-              final Timestamp timestamp = document['date']!;
-              final dateFormat = DateFormat('yyyy-MM-dd');
-              final formattedDate = dateFormat.format(timestamp.toDate());
+              final String date = document['date']!;
+              // final dateFormat = DateFormat('yyyy-MM-dd');
+              // final formattedDate = dateFormat.format(timestamp.toDate());
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
@@ -103,7 +105,7 @@ class _UserTypeScreenState extends State<TutorUpcomingSessionsScreen> {
                           title: Padding(
                             padding: const EdgeInsets.all(3.0),
                             child: FutureBuilder<String>(
-                              future: getTutorName(document),
+                              future: getStudentName(document),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
@@ -120,9 +122,7 @@ class _UserTypeScreenState extends State<TutorUpcomingSessionsScreen> {
                           ),
                           subtitle: Padding(
                             padding: const EdgeInsets.all(3.0),
-                            child: Text(document['subject'] +
-                                "\n\n" +
-                                formattedDate.toString()),
+                            child: Text(document['subject'] + "\n\n" + date),
                           ),
                           trailing: Padding(
                             padding: const EdgeInsets.all(3.0),
@@ -146,7 +146,7 @@ class _UserTypeScreenState extends State<TutorUpcomingSessionsScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                StudySessionDetailsScreen(
+                                                TutorStudySessionDetailsScreen(
                                                   studySession: studySession,
                                                 )));
                                   }
@@ -170,7 +170,7 @@ class _UserTypeScreenState extends State<TutorUpcomingSessionsScreen> {
 
   StudySession intializeStudySessionModel(QueryDocumentSnapshot document) {
     StudySession studySession = StudySession(
-        date: document['date'] ?? Timestamp.now(),
+        date: document['date'] ?? '',
         location: document['location'] ?? '',
         period: document['period'] ?? '',
         sessionId: document['session_id'] ?? '',

@@ -824,7 +824,7 @@ class _CalenderState extends State<CalenderScreen> {
               //     :
               StreamBuilder<QuerySnapshot>(
                 stream: getUpcomingSessionsByDate(
-                    _currentDate2), // Pass the stream here
+                    _currentDate2, widget.tutorObject.id), // Pass the stream here
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // While waiting for data to arrive
@@ -1076,52 +1076,52 @@ class _CalenderState extends State<CalenderScreen> {
     );
   }
 
-  _showSessionsDialog(DateTime date) async {
-    await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color.fromARGB(255, 243, 242, 243),
-        title: const Text('Sessions'),
-        content: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.5,
-          child: StreamBuilder<QuerySnapshot>(
-            stream: getUpcomingSessionsByDate(date),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const CircularProgressIndicator();
-              }
-              final documents = snapshot.data!.docs;
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView.builder(
-                  itemCount: documents.length,
-                  itemBuilder: (context, index) {
-                    final document = documents[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: const Color.fromARGB(255, 106, 102, 102),
-                          ),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(50)),
-                        ),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.all(5.0),
-                          leading: const Text(''),
-                          title: Text(document.toString()
-                              // '${document.date.day}/${document.date.month}/${document.date.year}'
-                              ),
-                          subtitle: const Text('eventsOfTheDay'),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              );
-            },
-          ),
+  // _showSessionsDialog(DateTime date) async {
+  //   await showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       backgroundColor: const Color.fromARGB(255, 243, 242, 243),
+  //       title: const Text('Sessions'),
+  //       content: SizedBox(
+  //         height: MediaQuery.of(context).size.height * 0.5,
+  //         child: StreamBuilder<QuerySnapshot>(
+  //           stream: getUpcomingSessionsByDate(date),
+  //           builder: (context, snapshot) {
+  //             if (!snapshot.hasData) {
+  //               return const CircularProgressIndicator();
+  //             }
+  //             final documents = snapshot.data!.docs;
+  //             return Padding(
+  //               padding: const EdgeInsets.all(8.0),
+  //               child: ListView.builder(
+  //                 itemCount: documents.length,
+  //                 itemBuilder: (context, index) {
+  //                   final document = documents[index];
+  //                   return Padding(
+  //                     padding: const EdgeInsets.all(6.0),
+  //                     child: Container(
+  //                       decoration: BoxDecoration(
+  //                         border: Border.all(
+  //                           color: const Color.fromARGB(255, 106, 102, 102),
+  //                         ),
+  //                         borderRadius:
+  //                             const BorderRadius.all(Radius.circular(50)),
+  //                       ),
+  //                       child: ListTile(
+  //                         contentPadding: const EdgeInsets.all(5.0),
+  //                         leading: const Text(''),
+  //                         title: Text(document.toString()
+  //                             // '${document.date.day}/${document.date.month}/${document.date.year}'
+  //                             ),
+  //                         subtitle: const Text('eventsOfTheDay'),
+  //                       ),
+  //                     ),
+  //                   );
+  //                 },
+  //               ),
+  //             );
+  //           },
+  //         ),
           //   ListView.builder(
           //     itemCount: eventsOfTheDay.length,
           //     itemBuilder: (context, index) {
@@ -1163,10 +1163,10 @@ class _CalenderState extends State<CalenderScreen> {
           //     icon: const Icon(Icons.schedule_send_outlined),
           //   ),
           // ),
-        ),
-      ),
-    );
-  }
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // _showAddDialog(DateTime day) async {
   //   await showDialog(

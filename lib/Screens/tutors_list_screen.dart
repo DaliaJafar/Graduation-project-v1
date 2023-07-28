@@ -89,26 +89,31 @@ class _TutorsListState extends State<TutorsList> {
                               Icons.star_rate,
                               color: Color.fromARGB(255, 237, 230, 160),
                             ),
-                            Text(snapshot.data.toString()),
+                            Text(snapshot.data!.toStringAsFixed(1)),
                           ],
                         );
                       },
                     ),
                     onTap: () {
+                      print('hourly rate');
+                      print(tutor['hourly_rate']);
+                      print(tutor['token']);
+
                       Tutor tutorObject = Tutor(
-                        id: tutor['tutor_id'],
-                        name: tutor['name'],
-                        location: tutor['location'],
-                        subject: tutor['subject'],
-                        hourly_rate: tutor['hourly_rate'],
-                        email: tutor['email'],
-                        phone: tutor['phone'],
-                        experience: tutor['experience'],
-                        profile_pic: tutor['profile_picture'],
-                        role: tutor['role'],
-                        qualification: tutor['qualification'],
-                      );
+                          id: tutor['tutor_id'],
+                          name: tutor['name'],
+                          location: tutor['location'],
+                          subject: tutor['subject'],
+                          hourly_rate: tutor['hourly_rate'],
+                          email: tutor['email'],
+                          phone: tutor['phone'],
+                          experience: tutor['experience'],
+                          profile_pic: tutor['profile_picture'],
+                          role: tutor['role'],
+                          qualification: tutor['qualification'],
+                          token: tutor['token'] ?? '');
                       print(tutorObject.toString());
+
                       print(tutorObject.email);
                       print(tutorObject.profile_pic);
                       FireBaseController()
@@ -116,7 +121,7 @@ class _TutorsListState extends State<TutorsList> {
                           .collection('users')
                           .where('role', isEqualTo: 'tutor')
                           .where('tutor_id', isEqualTo: tutor['tutor_id'])
-                          .orderBy('avg_rate', descending: true)
+                          // .orderBy('avg_rate', descending: true)
                           .get();
 
                       Navigator.push(

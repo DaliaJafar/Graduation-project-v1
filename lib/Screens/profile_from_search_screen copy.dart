@@ -32,9 +32,7 @@ class ProfilePage1Copy extends StatelessWidget {
 
       ProfileInfoItem(tutorObject.phone, 'Phone'),
 
-      ProfileInfoItem(tutorObject.experience, 'Degree'),
-
-      ProfileInfoItem('888', "Reviews"), // Added "Reviews" item
+      ProfileInfoItem(tutorObject.experience, 'Degree'), // Added "Reviews" item
     ];
 
     List<ProfileInfoItem> itemsTwo = [
@@ -126,7 +124,7 @@ class ProfilePage1Copy extends StatelessWidget {
                               children: [
                                 info_tab(items),
                                 reviewsTab(
-                                  getReviews('LSqLdoxQNsZddl7tmNRnYPJSghx1'),
+                                  getReviews(tutorObject.id),
                                   tutorObject.id,
                                   context,
                                 ),
